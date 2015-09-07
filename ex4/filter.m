@@ -10,9 +10,8 @@ output = arg_list{2};
 [gray_input_img, gray_input_map] = rgb2ind (input_img);
 
 x = ind2gray (gray_input_img, gray_input_map);
-x = uint8((255 * x) / max(max(x)));
 
 imwrite(x, "gray.pgm");
 
-R = conv2(x, ones(3) / 9, "same");
+R = conv2(x, ones(3) / 9);
 imwrite(R, output);
