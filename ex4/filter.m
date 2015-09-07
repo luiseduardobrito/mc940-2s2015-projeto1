@@ -6,10 +6,13 @@ arg_list = argv ();
 input = arg_list{1};
 output = arg_list{2};
 
-input_img = imread(input);
-gray_input_img = rgb2ind(input_img);
+[input_img, input_map, input_alpha] = imread (input);
+[gray_input_img, gray_input_map] = rgb2ind (input_img);
 
-imwrite(gray_input_img, "gray.pgm");
+x = ind2gray (gray_input_img, gray_input_map);
+x = uint8((255 * x) / max(max(x)));
 
-R = conv2(gray_input_img, ones(3) / 1);
+imwrite(x, "gray.pgm");
+
+R = conv2(x, ones(3) / 9, "same");
 imwrite(R, output);
