@@ -12,7 +12,7 @@ d_input_img = double(input_img);
 for i = 1:8
 
   img_bitplane = bitget(input_img, i);
-  filename = strcat(strcat("bitplane_", i), ".pgm");
+  filename = strcat(strcat("bitplane_", num2str(i)), ".pgm");
   imwrite(img_bitplane, strcat(output, filename));
 
   endfor
