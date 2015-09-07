@@ -19,12 +19,8 @@ if(is_same_size == 0)
     return;
 end
 
-d_image_a = double(img_input_a);
-d_image_b = double(img_input_b);
-
 alpha_image_a = 0.5 .* img_input_a;
 alpha_image_b = 0.5 .* img_input_b;
 
 R = alpha_image_a + alpha_image_b;
-
 imwrite(R, output);
