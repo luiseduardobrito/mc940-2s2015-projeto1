@@ -1,5 +1,6 @@
-#! /usr/local/bin/octave -qf
+#! /usr/local/bin/octave qf
 
+warning ("off", "Octave:broadcast");
 arg_list = argv ();
 
 input_a = arg_list{1};
