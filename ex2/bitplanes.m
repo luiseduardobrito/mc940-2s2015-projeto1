@@ -1,6 +1,5 @@
 #! /usr/local/bin/octave -qf
 
-addpath('./');
 arg_list = argv ();
 
 input = arg_list{1};
