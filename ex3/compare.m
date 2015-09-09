@@ -1,7 +1,6 @@
-#! /usr/local/bin/octave -qf
+#! /usr/local/bin/octave -q -f
 
-# Add path and get arguments
-addpath("./")
+warning ("off", "Octave:broadcast");
 arg_list = argv ();
 
 # Get arguments from arg list
@@ -13,44 +12,60 @@ output = arg_list{3};
 [input_img_a, input_map_a, input_alpha_a] = imread (input_a);
 [input_img_b, input_map_b, input_alpha_b] = imread (input_b);
 
+# Define the bins
+bins = [4,32,128,256];
+
 # Get RGB from image A
 img_a_r = input_img_a(:,:,1);
 img_a_g = input_img_a(:,:,2);
 img_a_b = input_img_a(:,:,3);
-
-# Quantize RGB from image A
-img_a_qr = imquantize(img_a_r, 32, "igs");
-img_a_qg = imquantize(img_a_g, 32, "igs");
-img_a_qb = imquantize(img_a_b, 32, "igs");
-
-# Get histogram from quantized RGB from image A
-hist_a_r = hist(img_a_qr);
-hist_a_g = hist(img_a_qg);
-hist_a_b = hist(img_a_qb);
-
-# Save histogram images as files from image A
-imwrite(hist_a_r, strcat(output, "peppers_hist_r.png"));
-imwrite(hist_a_g, strcat(output, "peppers_hist_g.png"));
-imwrite(hist_a_b, strcat(output, "peppers_hist_b.png"));
-
-
 
 # Get RGB from image B
 img_b_r = input_img_b(:,:,1);
 img_b_g = input_img_b(:,:,2);
 img_b_b = input_img_b(:,:,3);
 
-# Quantize RGB from image B
-img_b_qr = imquantize(img_b_r, 32, "igs");
-img_b_qg = imquantize(img_b_g, 32, "igs");
-img_b_qb = imquantize(img_b_b, 32, "igs");
+for bin = 1:4
 
-# Get histogram from quantized RGB from image B
-hist_b_r = hist(img_b_qr);
-hist_b_g = hist(img_b_qg);
-hist_b_b = hist(img_b_qb);
+  # Get histogram from image A
+  hist_a_r = hist(img_a_r, bins(bin));
+  hist_a_g = hist(img_a_g, bins(bin));
+  hist_a_b = hist(img_a_b, bins(bin));
 
-# Save histogram images as files from image B
-imwrite(hist_b_r, strcat(output, "baboon_hist_r.png"));
-imwrite(hist_b_g, strcat(output, "baboon_hist_g.png"));
-imwrite(hist_b_b, strcat(output, "baboon_hist_b.png"));
+  # Get histogram from image B
+  hist_b_r = hist(img_a_r, bins(bin));
+  hist_b_g = hist(img_a_g, bins(bin));
+  hist_b_b = hist(img_a_b, bins(bin));
+
+  # Normalize the histogram for the Image A
+  hist_a_r = hist_a_r / sum (hist_a_r);
+  hist_a_g = hist_a_g / sum (hist_a_g);
+  hist_a_b = hist_a_b / sum (hist_a_b);
+
+  # Calculate the euclidian distance for the images
+
+  # Normalize the histogram for the Image B
+  hist_a_r = hist_a_r / sum (hist_a_r);
+  hist_a_g = hist_a_g / sum (hist_a_g);
+  hist_a_b = hist_a_b / sum (hist_a_b);
+
+  # Save histogram images as files from image A
+  imwrite(hist_a_r, strcat(output, "baboon_hist_r.png"));
+  imwrite(hist_a_g, strcat(output, "baboon_hist_g.png"));
+  imwrite(hist_a_b, strcat(output, "baboon_hist_b.png"));
+
+  # Save histogram images as files from image B
+  imwrite(hist_b_r, strcat(output, "peppers_hist_r.png"));
+  imwrite(hist_b_g, strcat(output, "peppers_hist_g.png"));
+  imwrite(hist_b_b, strcat(output, "peppers_hist_b.png"));
+
+  # Calculate the euclidean distance for the RGB channels
+  dist_r(bin) = norm(hist_a_r - hist_b_r, 2);
+  dist_g(bin) = norm(hist_a_g - hist_b_g, 2);
+  dist_b(bin) = norm(hist_a_b - hist_b_b, 2);
+
+  # Calculate the mean euclidean distance for the images
+  d(bin) = mean([dist_r(bin), dist_g(bin), dist_b(bin)]);
+  disp(mat2str(d(bin)));
+
+endfor
