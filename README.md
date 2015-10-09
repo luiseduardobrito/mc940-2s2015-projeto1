@@ -2,9 +2,9 @@ mc940-2s2015-projeto1
 =====================
 
 
-Luís Eduardo Gomes do Amaral Brito
-Graduando em Engenharia de Computação
-RA 138760 / luis.brito@students.ic.unicamp.br / luiseduardo14@gmail.com
+**Luís Eduardo Gomes do Amaral Brito**<br/>
+Graduando em Engenharia de Computação<br/>
+RA 138760 / luis.brito@students.ic.unicamp.br / luiseduardo14@gmail.com<br/>
 
 ### Resumo 
 
